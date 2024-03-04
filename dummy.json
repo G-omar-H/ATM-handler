@@ -1,0 +1,343 @@
+{
+    "ATMs": [
+      {
+        "atmId": 1,
+        "atmName": "Main Branch ATM 1",
+        "networkAddress": "10.0.0.1",
+        "latitude": 40.7128,
+        "longitude": -74.0059,
+        "timezone": "America/New_York",
+        "subnet": "255.255.255.0",
+        "branchId": 1,
+        "groupId": 1
+      },
+      {
+        "atmId": 2,
+        "atmName": "Downtown Branch ATM 2",
+        "networkAddress": "10.0.0.2",
+        "latitude": 40.7059,
+        "longitude": -74.0085,
+        "timezone": "America/New_York",
+        "subnet": "255.255.255.0",
+        "branchId": 2,
+        "groupId": 1
+      },
+      {
+        "atmId": 3,
+        "atmName": "East City Branch ATM 1",
+        "networkAddress": "10.0.0.3",
+        "latitude": 39.2833,
+        "longitude": -76.6167,
+        "timezone": "America/New_York",
+        "subnet": "255.255.255.0",
+        "branchId": 3,
+        "groupId": 2
+      },
+      {
+        "atmId": 4,
+        "atmName": "Corner Store ATM (123 Main St.)",
+        "networkAddress": "10.1.1.1",
+        "latitude": 39.2904,
+        "longitude": -76.6374,
+        "timezone": "America/New_York",
+        "subnet": "255.255.255.0",
+        "branchId": 3,
+        "groupId": 3
+      }
+    ],
+    "Device": [
+        {
+          "deviceId": 1,
+          "deviceName": "ATM Controller"
+        },
+        {
+          "deviceId": 2,
+          "deviceName": "Cash Dispenser"
+        },
+        {
+          "deviceId": 3,
+          "deviceName": "Card Reader"
+        },
+        {
+          "deviceId": 4,
+          "deviceName": "Receipt Printer"
+        },
+        {
+          "deviceId": 5,
+          "deviceName": "Cash Deposit Module"
+        },
+        {
+          "deviceId": 6,
+          "deviceName": "Envelope Deposit Module"
+        },
+        {
+          "deviceId": 7,
+          "deviceName": "Touchscreen Display"
+        },
+        {
+          "deviceId": 8,
+          "deviceName": "Cash Cassette"
+        },
+        {
+          "deviceId": 9,
+          "deviceName": "Security Camera"
+        }
+      ],
+    "AtmDevices": [
+        {
+          "atmId": 1,
+          "deviceId": 1,
+          "deviceStatus": "Operational"
+        },
+        {
+          "atmId": 1,
+          "deviceId": 2,
+          "deviceStatus": "Operational"
+        },
+        {
+          "atmId": 1,
+          "deviceId": 3,
+          "deviceStatus": "Operational"
+        },
+        {
+          "atmId": 2,
+          "deviceId": 1,
+          "deviceStatus": "Operational"
+        },
+        {
+          "atmId": 2,
+          "deviceId": 2,
+          "deviceStatus": "Operational"
+        },
+        {
+          "atmId": 2,
+          "deviceId": 3,
+          "deviceStatus": "Operational"
+        },
+        {
+          "atmId": 3,
+          "deviceId": 1,
+          "deviceStatus": "Operational"
+        },
+        {
+          "atmId": 3,
+          "deviceId": 2,
+          "deviceStatus": "Operational"
+        },
+        {
+          "atmId": 3,
+          "deviceId": 3,
+          "deviceStatus": "Operational"
+        },
+        {
+          "atmId": 4,
+          "deviceId": 1,
+          "deviceStatus": "Operational"
+        },
+        {
+          "atmId": 4,
+          "deviceId": 2,
+          "deviceStatus": "Operational"
+        },
+        {
+          "atmId": 4,
+          "deviceId": 3,
+          "deviceStatus": "Operational"
+        }
+    ],
+    "ElectronicJournals": [
+        {
+            "ejId": 1,
+            "ejData": "Cash withdrawal completed successfully for user John Smith (USR-12345). Account: 123456, Amount: $40. Available balance: $440. Transaction time: 2024-03-05 10:15:00 AM. Card used: Debit card ending in XXXX-1234.",
+            "atmId": 1
+          },
+          {
+            "ejId": 2,
+            "ejData": "Deposit of $100 made for user Jane Doe (USR-54321) using cash. Account: 987654, New balance: $720. Transaction time: 2024-03-04 04:30:00 PM. Teller ID: 1001.",
+            "atmId": 2
+          },
+          {
+            "ejId": 3,
+            "ejData": "Balance inquiry for user Michael Brown (USR-98765). Account: 876543, Available balance: $1250. Transaction time: 2024-03-04 02:00:00 PM. Card used: Credit card ending in XXXX-5678.",
+            "atmId": 3
+          },
+          {
+            "ejId": 4,
+            "ejData": "PIN change successful for user David Lee (USR-24680). Transaction time: 2024-03-05 12:30:00 PM. Card used: Debit card ending in XXXX-9012.",
+            "atmId": 4
+          },
+          {
+            "ejId": 5,
+            "ejData": "Transfer of $200 initiated from account 123456 (John Smith) to account 789012 (Sarah Jones). Transaction time: 2024-03-04 08:00:00 AM. Confirmation required.",
+            "atmId": 1
+          },
+          {
+            "ejId": 6,
+            "ejData": "Failed login attempt for user (USR-99999). Incorrect PIN entered. Transaction time: 2024-03-05 03:15:00 AM. Card used: Debit card ending in XXXX-3456.",
+            "atmId": 2
+          },
+          {
+            "ejId": 7,
+            "ejData": "Card dispensed for user Michael Brown (USR-98765). Account: 876543. Transaction time: 2024-03-04 09:00:00 AM. Card used: Debit card ending in XXXX-5678.",
+            "atmId": 3
+          },
+          {
+            "ejId": 8,
+            "ejData": "Cash dispenser malfunction detected. Transaction aborted. Transaction time: 2024-03-05 01:00:00 PM. ATM: Corner Store ATM (123 Main St.).",
+            "atmId": 4
+          }
+        ],
+        "Event": [
+          {
+            "eventId": 1,
+            "eventType": "Cash Withdrawal",
+            "ejId": 1
+          },
+          {
+            "eventId": 2,
+            "eventType": "Balance Inquiry",
+            "ejId": 2
+          },
+          {
+            "eventId": 3,
+            "eventType": "Deposit",
+            "ejId": 3
+          },
+          {
+            "eventId": 4,
+            "eventType": "Transfer",
+            "ejId": 4
+          },
+          {
+            "eventId": 5,
+            "eventType": "Card Payment",
+            "ejId": 5
+          },
+          {
+            "eventId": 6,
+            "eventType": "Account Lockout",
+            "ejId": 6
+          },
+          {
+            "eventId": 7,
+            "eventType": "Dispenser Error",
+            "ejId": 7
+          },
+          {
+            "eventId": 8,
+            "eventType": "Network Outage",
+            "ejId": 8
+          }
+        ],
+        "Groups": [
+            {
+              "groupId": 1,
+              "groupName": "Main Branch ATMs",
+              "groupDescription": "ATMs located within the main branch building. These ATMs cater to a high volume of transactions and offer extended operating hours.",
+              "groupType": "Branch",
+              "regionId": 1
+            },
+            {
+              "groupId": 2,
+              "groupName": "Downtown Branch ATMs",
+              "groupDescription": "ATMs located in the downtown branch, serving a primarily business clientele. These ATMs offer enhanced security features.",
+              "groupType": "Branch",
+              "regionId": 1
+            },
+            {
+              "groupId": 3,
+              "groupName": "East City Branch ATMs",
+              "groupDescription": "ATMs located in the East City branch, serving a diverse residential and commercial community.",
+              "groupType": "Branch",
+              "regionId": 2
+            },
+            {
+              "groupId": 4,
+              "groupName": "Convenience Store ATMs",
+              "groupDescription": "ATMs located in partner convenience stores across the city, providing 24/7 access for customers on the go.",
+              "groupType": "Off-site",
+              "regionId": 1
+            },
+            {
+              "groupId": 5,
+              "groupName": "University Campus ATMs",
+              "groupDescription": "ATMs located on university campuses, serving students and staff. These ATMs offer features like bill payment and mobile top-up.",
+              "groupType": "Off-site",
+              "regionId": 2
+            }
+        ],
+        "Transaction": [
+            {
+              "transactionId": 1,
+              "transactionType": "Withdrawal",
+              "transactionDetail": "Withdrawal of $200 from account 123456 at ATM XYZ (Branch: Main Branch, Group: Main Branch ATMs)",
+              "ejId": 1
+            },
+            {
+              "transactionId": 2,
+              "transactionType": "Balance Inquiry",
+              "transactionDetail": "Balance inquiry for account 54321 at ATM ABC (Branch: Downtown Branch, Group: Off-site ATMs)",
+              "ejId": 2
+            },
+            {
+              "transactionId": 3,
+              "transactionType": "Deposit",
+              "transactionDetail": "Deposit of $500 to account 987654 using envelope at ATM DEF (Branch: West Coast Headquarters, Group: Convenience Store ATMs)",
+              "ejId": 3
+            },
+            {
+              "transactionId": 4,
+              "transactionType": "Transfer",
+              "transactionDetail": "Transfer of $100 from account 123456 to account 54321 at ATM GHI (Branch: Chicago Office, Group: University Campus ATMs)",
+              "ejId": 4
+            },
+            {
+              "transactionId": 5,
+              "transactionType": "Card Payment",
+              "transactionDetail": "Card payment of $25.99 for merchant ABC at ATM JKL (Branch: Main Branch, Group: Main Branch ATMs)",
+              "ejId": 5
+            }
+        ],
+        "Branch": [
+          {
+            "branchId": 1,
+            "branchName": "Main Branch",
+            "regionId": 1
+          },
+          {
+            "branchId": 2,
+            "branchName": "Downtown Branch",
+            "regionId": 1
+          },
+          {
+            "branchId": 3,
+            "branchName": "West Coast Headquarters",
+            "regionId": 2
+          },
+          {
+            "branchId": 4,
+            "branchName": "Chicago Office",
+            "regionId": 3
+          },
+          {
+            "branchId": 5,
+            "branchName": "University Branch",
+            "regionId": 2
+          }
+        ],
+        "Region": [
+          {
+            "regionId": 1,
+            "regionName": "East Coast"
+          },
+          {
+            "regionId": 2,
+            "regionName": "West Coast"
+          },
+          {
+            "regionId": 3,
+            "regionName": "Midwest"
+          }
+        ]
+}
+                    
