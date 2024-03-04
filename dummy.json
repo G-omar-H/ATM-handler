@@ -1,5 +1,5 @@
 {
-    "ATMs": [
+    "ATM": [
       {
         "atmId": 1,
         "atmName": "Main Branch ATM 1",
@@ -83,7 +83,7 @@
           "deviceName": "Security Camera"
         }
       ],
-    "AtmDevices": [
+    "AtmDevice": [
         {
           "atmId": 1,
           "deviceId": 1,
@@ -145,7 +145,7 @@
           "deviceStatus": "Operational"
         }
     ],
-    "ElectronicJournals": [
+    "ElectronicJournal": [
         {
             "ejId": 1,
             "ejData": "Cash withdrawal completed successfully for user John Smith (USR-12345). Account: 123456, Amount: $40. Available balance: $440. Transaction time: 2024-03-05 10:15:00 AM. Card used: Debit card ending in XXXX-1234.",
@@ -229,7 +229,7 @@
             "ejId": 8
           }
         ],
-        "Groups": [
+        "Group": [
             {
               "groupId": 1,
               "groupName": "Main Branch ATMs",
