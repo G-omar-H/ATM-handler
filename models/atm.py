@@ -4,7 +4,7 @@ main ATM class table
 """
 
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 
 class Atm(BaseModel, Base):
