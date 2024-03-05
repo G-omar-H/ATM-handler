@@ -1,12 +1,22 @@
 #!/usr/bin/python3
-
 """
-Populating the master db
+        storage data engine
+        MySQL DataBase
 """
 
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
-import os
+from models.base_model import Base
+from models.atm import Atm
+from models.atmdevice import AtmDevice
+from models.branch import Branch
+from models.device import Device
+from models.event import Event
+from models.region import Region
+from models.electrinicjournal import ElectronicJournal
+from models.transaction import Transaction
+from models.group import Group
 
 class DBStorage:
     """
@@ -28,6 +38,24 @@ class DBStorage:
             pool_pre_ping=True, 
         )
 
+    def all(self, cls=None):
+        """
+        query on the current database session
+        all objects depending of the class name (argument cls)
+        """
+        obj_dict = {}
+        objs_list = [Group, Transaction, ElectronicJournal, Region, Event, Device, Branch, AtmDevice, Atm]
+        objs = []
+        if cls is not None:
+            objs.extend(self.__session.query(cls).all())
+        else:
+            for table_name in objs_list:
+                objs.extend(self.__session.query(table_name).all())
+        for obj in objs:
+            key = f"{obj.__class__.__name__}.{obj.id}"
+            obj_dict[key] = obj
+        return obj_dict
+    
     def new(self, obj):
         """
         add the object to the current database session.
