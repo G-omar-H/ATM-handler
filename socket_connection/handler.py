@@ -41,4 +41,7 @@ with open(filename, "wb") as f:
         
 
 client_socket.close()
-s.close() 
+s.close()
+
+with open("../data_received.txt", "w") as f:
+    f.write("Data received")
