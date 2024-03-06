@@ -1,33 +1,102 @@
-from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
+import subprocess
+
+try:
+    subprocess.run(
+        ["pip", "install", "sqlalchemy>=2.0.0"],
+        check=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+except subprocess.CalledProcessError as e:
+    print("Error installing dependencies:", e)
+    exit(1)
+
+from sqlalchemy import (
+    create_engine,
+    MetaData,
+    Column,
+    Integer,
+    String,
+    Float,
+    ForeignKey,
+    DateTime,
+    DECIMAL,
+    Table,
+    Enum,
+)
 from sqlalchemy.orm import relationship
+from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import sessionmaker
+import json
+import os
+import sys
 
 # Replace with your actual database connection details
-connection_string = "mysql+mysqldb://{}:{}@{}/{}".format(
-             getenv("USER"),
-                getenv("PWD"),
-                getenv("HOST"),
-                getenv("DB"),
-            )
-engine = create_engine(connection_string, pool_pre_ping=True,)
+connection_string = f"mysql+mysqldb://{os.environ.get('DB_USER')}:{os.environ.get('DB_PASSWORD')}@{os.environ.get('DB_HOST')}/{os.environ.get('DB_NAME')}"
 
-# Define base class for table models
-Base = declarative_base()
+engine = create_engine(
+    connection_string,
+    pool_pre_ping=True,
+)
 
-# Define table models reflecting your database schema (modify data types and relationships as needed)
+
+# declarative base class
+class Base(DeclarativeBase):
+    pass
+
+
+# Define table models reflecting your database schema
 class Region(Base):
     __tablename__ = "Region"
 
-    regionId = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     regionName = Column(String(50))
+
 
 class Branch(Base):
     __tablename__ = "Branch"
 
     branchId = Column(Integer, primary_key=True)
     branchName = Column(String(50))
-    regionId = Column(Integer, ForeignKey(Region.regionId))
+    regionId = Column(Integer, ForeignKey(Region.id))
+
+    def __repr__(self):
+        return f"Branch(branchId={self.branchId}, \
+            branchName='{self.branchName}', \
+                regionId={self.regionId})"
+
+
+class Group(Base):
+    __tablename__ = "Group"
+
+    groupId = Column(Integer, primary_key=True)
+    groupName = Column(String(100))
+    groupDescription = Column(String(5000))
+    groupType = Column(Enum("Static", "Dynamic"))
+
+    atms = relationship("ATM", secondary="group_atm", backref="groups")
+
+    def __repr__(self):
+        return (
+            f"Group(groupId={self.groupId}, groupName='{self.groupName}', "
+            f"groupDescription='{self.groupDescription}', atms={self.atms})"
+        )
+
+
+class Device(Base):
+    __tablename__ = "Device"
+
+    deviceId = Column(Integer, primary_key=True)
+    deviceModel = Column(String(100))  # Adjust length as needed
+    deviceManufacturer = Column(String(100))  # Adjust length as needed
+    deviceSerialNumber = Column(String(50))  # Adjust length as needed
+
+    def __repr__(self):
+        return f"Device(deviceId={self.deviceId}, \
+                        deviceModel='{self.deviceModel}', \
+                        deviceManufacturer='{self.deviceManufacturer}', \
+                        deviceSerialNumber='{self.deviceSerialNumber}')"
+
 
 class ATM(Base):
     __tablename__ = "ATM"
@@ -37,86 +106,124 @@ class ATM(Base):
     networkAddress = Column(String(45))
     latitude = Column(Float)
     longitude = Column(Float)
-    timezone = Column(String(45))
+    timezone = Column(String(100))
     subnet = Column(String(45))
     branchId = Column(Integer, ForeignKey(Branch.branchId))
-    groupId = Column(Integer)
+    groupId = Column(Integer, ForeignKey(Group.groupId))
+    status = Column(String(20), default="Online")
+    cash_level = Column(DECIMAL(10, 2))
+    last_cash_replenishment = Column(String(100))
+    software_version = Column(String(50))
+    uptime = Column(Integer)
 
-    branch = relationship("Branch", backref="atms")
-    group = relationship("Group", backref="atms")
+    # Relationship with AtmDevice
+    devices = relationship("AtmDevice", backref="atm")
 
-class Device(Base):
-    __tablename__ = "Device"
+    def __repr__(self):
+        return f"ATM(atmId={self.atmId}, \
+                atmName='{self.atmName}', \
+                branchId={self.branchId}, \
+                groupId={self.groupId})"
 
-    deviceId = Column(Integer, primary_key=True)
-    deviceName = Column(String(100))
+
+# Define the association table for the many-to-many relationship
+group_atm = Table(
+    "group_atm",
+    Base.metadata,
+    Column("groupId", Integer, ForeignKey("Group.groupId")),
+    Column("atmId", Integer, ForeignKey("ATM.atmId")),
+)
+
 
 class AtmDevice(Base):
     __tablename__ = "AtmDevice"
 
     atmId = Column(Integer, ForeignKey(ATM.atmId), primary_key=True)
     deviceId = Column(Integer, ForeignKey(Device.deviceId), primary_key=True)
-    deviceStatus = Column(String(100))
+    deviceStatus = Column(String(20))
 
-    atm = relationship("ATM", backref="atm_devices")
-    device = relationship("Device", backref="atm_devices")
+    def __repr__(self):
+        return f"AtmDevice(atmId={self.atmId}, \
+                deviceId={self.deviceId}, \
+                deviceStatus='{self.deviceStatus}')"
+
 
 class ElectronicJournal(Base):
     __tablename__ = "ElectronicJournal"
 
     ejId = Column(Integer, primary_key=True)
-    ejData = Column(String(1000))
-    atmId = Column(Integer, ForeignKey(ATM.atmId))
+    ejData = Column(String(1000), nullable=False)
+    atmId = Column(Integer, ForeignKey("ATM.atmId"), nullable=False)
+    timestamp = Column(String(100), nullable=False)
+
+    # Relationship with ATM table
+    atm = relationship("ATM", backref="electronic_journals")
+
+    def __repr__(self):
+        return f"<ElectronicJournal(ejId={self.ejId}, \
+                        ejData={self.ejData}, atmId={self.atmId}, \
+                        timestamp={self.timestamp})>"
+
 
 class Event(Base):
     __tablename__ = "Event"
 
     eventId = Column(Integer, primary_key=True)
-    eventType = Column(String(100))
-    ejId = Column(Integer, ForeignKey(ElectronicJournal.ejId))
+    eventName = Column(String(100), nullable=False, unique=True)
+    eventLevel = Column(Enum("INFO", "WARNING", "ERROR", "CRITICAL"),
+                        nullable=False)
+    ejId = Column(Integer, ForeignKey("ElectronicJournal.ejId"))
 
-class Group(Base):
-    __tablename__ = "Group"
+    # Relationship with ElectronicJournal table
+    electronic_journal = relationship("ElectronicJournal", backref="events")
 
-    groupId = Column(Integer, primary_key=True)
-    groupName = Column(String(100))
-    groupDescription = Column(String(100))
-    groupType = Column(String(45))
-    regionId = Column(Integer, ForeignKey(Region.regionId))
+    def __repr__(self):
+        return f"<Event(eventId={self.eventId},\
+                eventName={self.eventName}, \
+                eventLevel={self.eventLevel}, \
+                ejId={self.ejId})>"
+
 
 class Transaction(Base):
     __tablename__ = "Transaction"
 
     transactionId = Column(Integer, primary_key=True)
-    transactionType = Column(String(45))
+    transactionType = Column(String(45), nullable=False)
     transactionDetail = Column(String(1000))
-    ejId = Column(Integer, ForeignKey(ElectronicJournal.ejId))
+    ejId = Column(Integer, ForeignKey("ElectronicJournal.ejId"))
+
+    # Relationship with ElectronicJournal table
+    electronic_journal = relationship("ElectronicJournal",
+                                      backref="transactions")
+
+    def __repr__(self):
+        return f"<Transaction(transactionId={self.transactionId}, \
+                    transactionType={self.transactionType}, \
+                    transactionDetail={self.transactionDetail}, \
+                    ejId={self.ejId})>"
 
 
 # Create all tables in the database (comment out if tables already exist)
 Base.metadata.create_all(engine)
 
 # Open a session
-session = sessionmaker(bind=engine)()
 
 # Load JSON data
-import json
+
 with open("dummy.json", "r") as f:
     data = json.load(f)
 
-# Iterate through each table in the JSON data
-for table_name, table_data in data.items():
-    # Get the corresponding table model class
-    table_model = getattr(sys.modules[__name__], table_name)
+with sessionmaker(bind=engine)() as session:
+    # Iterate through each table in the JSON data
+    for table_name, table_data in data.items():
+        # Get the corresponding table model class
+        table_model = getattr(sys.modules[__name__], table_name)
 
-    # Insert data into the table
-    for row in table_data:
-        session.add(table_model(**row))
+        # Insert data into the table
+        for row in table_data:
+            session.add(table_model(**row))
 
-# Commit changes to the database
-session.commit()
-
-# Close the session
-session.close()
+        # Commit changes to the database
+        session.commit()
 
 print("Data successfully populated from JSON file.")
