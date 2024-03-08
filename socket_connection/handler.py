@@ -38,10 +38,10 @@ with open(filename, "wb") as f:
             break
         f.write(bytes_read)
         progress.update(len(bytes_read))
-        
+    sys.stdout.flush()
 
 client_socket.close()
 s.close()
 
-with open("../data_received.txt", "w") as f:
+with open("data_received.txt", "w") as f:
     f.write("Data received")

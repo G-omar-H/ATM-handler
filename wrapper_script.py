@@ -13,6 +13,8 @@ while True:
     while os.path.exists(flag_file_path):
         time.sleep(1)
 
+        received_filename = os.path.basename(flag_file_path)  # Get the filename
+
         # Execute the data processing script after processing is finished
         subprocess.run(["python", "atm_data_seeder.py", received_filename])  
 

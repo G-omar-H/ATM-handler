@@ -13,7 +13,7 @@ BUFFER_SIZE = 4096
 host = "100.25.15.47"
 port = 5555
 
-filename = "events.json"
+filename = "dummy.json"
 filesize = os.path.getsize(filename)
 
 s = socket.socket()
