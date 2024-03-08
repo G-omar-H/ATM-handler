@@ -17,8 +17,8 @@ ENV DB_PASSWORD=${DB_PASSWORD}
 ENV DB_HOST=${DB_HOST}
 ENV DB_NAME=${DB_NAME}
 
-# Set working directory in Python script
-CMD ["python", "-m", "atm_data_seeder", "/app/dummy.json"]
+# Entrypoint for the container
+ENTRYPOINT ["/app/automate.sh"]
 
 # Expose port
 EXPOSE 5555

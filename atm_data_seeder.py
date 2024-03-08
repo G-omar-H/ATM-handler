@@ -221,7 +221,7 @@ with sessionmaker(bind=engine)() as session:
 
         # Insert data into the table
         for row in table_data:
-            session.add(table_model(**row))
+            session.merge(table_model(**row))
 
         # Commit changes to the database
         session.commit()

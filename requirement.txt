@@ -1,2 +1,14 @@
+-i https://pypi.org/simple
+libmysqlclient-dev
+MySQL-python
 sqlalchemy>=2.0.0
-json
+mysqlclient
+mysqldb  # MySQL database driver
+sockets  # For socket connections (included in Python standard library)
+requests>=2.27.1  # HTTP library for making API requests
+tqdm  # Optional, for progress bar (already included in your script)
+logging  # For structured logging
+
+# Optional future enhancements
+smtplib  # For sending email alerts
+twilio  # For sending SMS alerts
