@@ -22,5 +22,5 @@ while True:
         os.remove(flag_file_path)
         print("Data processed and flag file removed.")
 
-    # Wait for some time before checking again (adjust as needed)
+    # Wait for some time before checking again
     time.sleep(5)

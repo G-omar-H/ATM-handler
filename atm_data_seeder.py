@@ -31,7 +31,6 @@ import json
 import os
 import sys
 
-# Replace with your actual database connection details
 connection_string = f"mysql://{os.environ.get('DB_USER')}:{os.environ.get('DB_PASSWORD')}@{os.environ.get('DB_HOST')}/{os.environ.get('DB_NAME')}"
 
 engine = create_engine(
@@ -45,7 +44,7 @@ class Base(DeclarativeBase):
     pass
 
 
-# Define table models reflecting your database schema
+# Define table models reflecting the database schema
 class Region(Base):
     __tablename__ = "Region"
 
@@ -74,7 +73,7 @@ class Group(Base):
     groupDescription = Column(String(5000))
     groupType = Column(Enum("Static", "Dynamic"))
 
-    atms = relationship("ATM", secondary="group_atm", backref="groups")
+    atms = relationship("ATM", secondary="group_atm", backref="groups", cascade="all, delete, delete-orphan")
 
     def __repr__(self):
         return (
@@ -87,9 +86,9 @@ class Device(Base):
     __tablename__ = "Device"
 
     deviceId = Column(Integer, primary_key=True)
-    deviceModel = Column(String(100))  # Adjust length as needed
-    deviceManufacturer = Column(String(100))  # Adjust length as needed
-    deviceSerialNumber = Column(String(50))  # Adjust length as needed
+    deviceModel = Column(String(100))
+    deviceManufacturer = Column(String(100))
+    deviceSerialNumber = Column(String(50))
 
     def __repr__(self):
         return f"Device(deviceId={self.deviceId}, \
@@ -203,16 +202,16 @@ class Transaction(Base):
                     ejId={self.ejId})>"
 
 
-# Create all tables in the database (comment out if tables already exist)
+# Create all tables if not exists in the database
 Base.metadata.create_all(engine)
 
-# Open a session
+
 
 # Load JSON data
-
 with open("dummy.json", "r") as f:
     data = json.load(f)
 
+# Open a session
 with sessionmaker(bind=engine)() as session:
     # Iterate through each table in the JSON data
     for table_name, table_data in data.items():

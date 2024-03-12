@@ -1,9 +1,10 @@
 -i https://pypi.org/simple
 sqlalchemy>=2.0.0
 mysqlclient
+mysql-connector-python
 sockets  # For socket connections (included in Python standard library)
 requests>=2.27.1  # HTTP library for making API requests
-tqdm  # Optional, for progress bar (already included in your script)
+tqdm  # Optional, for progress bar
 
 # Optional future enhancements
 twilio  # For sending SMS alerts

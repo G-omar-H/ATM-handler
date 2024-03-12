@@ -17,6 +17,8 @@ ENV DB_PASSWORD=${DB_PASSWORD}
 ENV DB_HOST=${DB_HOST}
 ENV DB_NAME=${DB_NAME}
 
+ARG IMAGE_NAME
+
 # Entrypoint for the container
 ENTRYPOINT ["/app/automate.sh"]
 

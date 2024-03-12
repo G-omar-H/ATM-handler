@@ -3,20 +3,12 @@ Description=ATM Monitoring Application
 After=network.target
 
 [Service]
-
 # User=system_user
-
 WorkingDirectory=~/ATM-handler
-
-# Activate virtual environment within the script
 ExecStart=/bin/bash -c 'source ~/ATM-handler/my_atm_env/bin/activate && /bin/bash ~/ATM-handler/docker-deploy.sh'
-
 Restart=always
-
 StandardOutput=syslog
-
 StandardError=syslog
-
 SyslogIdentifier=atm_monitor
 
 [Install]
