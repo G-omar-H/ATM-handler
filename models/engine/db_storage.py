@@ -8,7 +8,7 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from models.base_model import Base
-from models.atm import Atm
+from models.atm import ATM
 from models.atmdevice import AtmDevice
 from models.branch import Branch
 from models.device import Device
@@ -29,14 +29,16 @@ class DBStorage:
         """
         initialization...
         """
-        self.__engine = create_engine("mysql+mysqldb://{}:{}@{}/{}".format(
-             getenv("USER"),
-                getenv("PWD"),
-                getenv("HOST"),
-                getenv("DB"),
+        self.__engine = create_engine("mysql://{}:{}@{}/{}".format(
+             getenv("DB_USER"),
+                getenv("DB_PASSWORD"),
+                getenv("DB_HOST"),
+                getenv("DB_NAME"),
             ),
             pool_pre_ping=True, 
         )
+        # Create all tables if not exists
+        Base.metadata.create_all(self.__engine)
 
     def all(self, cls=None):
         """
@@ -81,16 +83,32 @@ class DBStorage:
         create all tables in the database and the current database session
         """
         Base.metadata.create_all(self.__engine)
+
         session_factory = sessionmaker(bind=self.__engine,
                                        expire_on_commit=False)
         Session = scoped_session(session_factory)
         self.__session = Session()
 
-    def close(self):
+    def load_from_json(self, filename="dummy.json"):
         """
-        close a connected  session
-        Keyword arguments:
-        argument -- description
-        Return: return_description
+        Load data from a JSON file and insert into the database.
         """
-        self.__session.close()
+        try:
+            with open(filename, "r") as f:
+                data = json.load(f)
+        except FileNotFoundError:
+            print(f"Error: JSON file {filename} not found!")
+            return
+
+        # Iterate through each table in the JSON data
+        for table_name, table_data in data.items():
+            # Get the corresponding table model class
+            table_model = getattr(sys.modules[__name__], table_name)
+
+            # Insert data into the table
+            for row in table_data:
+                self.__session.merge(table_model(**row))
+
+        # Commit changes to the database
+        self.save()
+        print(f"Data successfully populated from JSON file {filename}.")
